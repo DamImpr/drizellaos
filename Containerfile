@@ -4,8 +4,11 @@ COPY build_files /
 COPY system_files /system_files
 
 # Base Image
-FROM ghcr.io/ublue-os/bazzite:stable
+# Fedora Atomic senza desktop (base-atomic). Driver NVIDIA compilati in build da RPM Fusion.
+FROM quay.io/fedora-ostree-desktops/base-atomic:44
+
 ## Other possible base images include:
+#FROM ghcr.io/ublue-os/bazzite:stable
 # FROM ghcr.io/ublue-os/bazzite:testing
 # FROM ghcr.io/ublue-os/aurora:stable
 # FROM ghcr.io/ublue-os/bluefin-nvidia-open:stable
