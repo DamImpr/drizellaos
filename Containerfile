@@ -39,6 +39,11 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
+### LABELS
+## bootc richiede la label ostree.bootable sull'immagine finale
+LABEL containers.bootc="1" \
+      ostree.bootable="true"
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint
