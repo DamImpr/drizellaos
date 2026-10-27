@@ -52,7 +52,7 @@ Sostituisci `<utente>` con il proprietario del repository GitHub che pubblica l'
 Le immagini sono firmate con cosign; la chiave pubblica è in `cosign.pub`:
 
 ```bash
-cosign verify --key cosign.pub ghcr.io/<utente>/drizella-os
+cosign verify --key cosign.pub ghcr.io/DamImpr/drizella-os
 ```
 
 ## Configurazione e setup
