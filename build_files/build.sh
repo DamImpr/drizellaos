@@ -119,3 +119,17 @@ systemctl enable NetworkManager.service
 systemctl set-default graphical.target
 # Avvia DMS insieme a niri (equivale a `systemctl --user add-wants niri.service dms`)
 systemctl --global add-wants niri.service dms.service
+
+########################################
+# 6. Configurazione greetd -> dms-greeter (scritta dopo l'install dei pacchetti,
+#    così il file di default di greetd non la sovrascrive)
+########################################
+mkdir -p /etc/greetd
+cat > /etc/greetd/config.toml <<'EOF'
+[terminal]
+vt = 1
+
+[default_session]
+user = "greeter"
+command = "/usr/bin/dms-greeter --command niri"
+EOF
