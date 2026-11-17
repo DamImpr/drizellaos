@@ -55,9 +55,15 @@ dnf5 -y install akmods gcc make
 
 # Il %post del pacchetto prova a compilare per il kernel dell'HOST e può fallire: va bene,
 # compiliamo noi per il kernel dell'immagine subito dopo.
-dnf5 -y install akmod-nvidia-open xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs \
+# Da F45 RPM Fusion non ha più akmod-nvidia-open: akmod-nvidia è già open-only (driver >= 590).
+if dnf5 -q repoquery akmod-nvidia-open 2>/dev/null | grep -q .; then
+    AKMOD=akmod-nvidia-open
+else
+    AKMOD=akmod-nvidia
+fi
+dnf5 -y install "$AKMOD" xorg-x11-drv-nvidia xorg-x11-drv-nvidia-libs \
     nvidia-settings libva-nvidia-driver || true
-rpm -q akmod-nvidia-open xorg-x11-drv-nvidia   # fallisce la build se non installati
+rpm -q "$AKMOD" xorg-x11-drv-nvidia   # fallisce la build se non installati
 
 akmods --force --kernels "${KVER}"
 # Verifica che il modulo esista davvero
