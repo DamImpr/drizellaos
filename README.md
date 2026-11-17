@@ -6,9 +6,9 @@ L'immagine viene costruita con una `Containerfile` e distribuita come immagine O
 
 ## Caratteristiche
 
-- **Base**: `quay.io/fedora-ostree-desktops/base-atomic:44` (Fedora Atomic senza desktop)
+- **Base**: `quay.io/fedora-ostree-desktops/base-atomic:45` (Fedora Atomic senza desktop)
 - **Desktop**: compositor Wayland scrollabile `niri` con shell `DankMaterialShell` (`dms`) e greeter `dms-greeter` su `greetd`
-- **GPU NVIDIA**: driver open (`akmod-nvidia-open`) da RPM Fusion, compilati durante la build per il kernel dell'immagine, con initramfs rigenerato
+- **GPU NVIDIA**: driver open (`akmod-nvidia-open`, oppure `akmod-nvidia` da F45) da RPM Fusion, compilati durante la build per il kernel dell'immagine, con initramfs rigenerato
 - **Audio e rete**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
 - **Applicazioni**: Firefox, Nautilus, Alacritty, Ghostty, Flatpak
 - **Immagini di installazione**: configurazioni per ISO (GNOME/KDE) e dischi in `disk_config/`
@@ -38,7 +38,9 @@ Vedi `just --list` per i comandi disponibili (ISO, immagini disco, VM).
 
 ## Installazione
 
-Da un sistema basato su bootc (Fedora Atomic, Bazzite, Bluefin, Aurora...):
+Guida completa, partendo da una live ISO e installando su disco con `bootc install`: [docs/INSTALL.md](docs/INSTALL.md).
+
+In alternativa, da un sistema basato su bootc (Fedora Atomic, Bazzite, Bluefin, Aurora...):
 
 ```bash
 sudo bootc switch ghcr.io/<utente>/drizella-os:latest
