@@ -86,7 +86,7 @@ dnf5 install -y \
     xorg-x11-server-Xwayland \
     pipewire pipewire-pulseaudio wireplumber \
     NetworkManager-wifi bluez power-profiles-daemon upower accountsservice \
-    flatpak sudo xdg-user-dirs git vim-enhanced \
+    flatpak sudo xdg-user-dirs git vim-enhanced fastfetch \
     google-noto-sans-fonts google-noto-emoji-fonts
 
 ########################################
@@ -138,4 +138,13 @@ vt = 1
 [default_session]
 user = "greeter"
 command = "/usr/bin/dms-greeter --command niri"
+EOF
+
+########################################
+# 7. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
+########################################
+sed -i -e '/^NAME=/d' -e '/^PRETTY_NAME=/d' -e '/^LOGO=/d' /usr/lib/os-release
+cat >> /usr/lib/os-release <<'EOF'
+NAME="Drizella OS"
+PRETTY_NAME="Drizella OS"
 EOF
