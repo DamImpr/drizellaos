@@ -1,66 +1,72 @@
 # DrizellaOS
 
-DrizellaOS è un'immagine [bootc](https://github.com/bootc-dev/bootc) personalizzata, basata su Fedora Atomic, pensata come sistema desktop immutabile con [niri](https://github.com/YaLTeR/niri) e [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell).
+DrizellaOS is a custom [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic, designed as an immutable desktop system with [niri](https://github.com/YaLTeR/niri) and [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell).
 
-L'immagine viene costruita con una `Containerfile` e distribuita come immagine OCI firmata con [cosign](https://github.com/sigstore/cosign). Il progetto parte dal [template di Universal Blue](https://github.com/ublue-os/image-template).
+The image is built from a `Containerfile` and distributed as an OCI image signed with [cosign](https://github.com/sigstore/cosign). The project starts from the [Universal Blue template](https://github.com/ublue-os/image-template).
 
-## Caratteristiche
+## Features
 
-- **Base**: `quay.io/fedora-ostree-desktops/base-atomic:45` (Fedora Atomic senza desktop)
-- **Desktop**: compositor Wayland scrollabile `niri` con shell `DankMaterialShell` (`dms`) e greeter `dms-greeter` su `greetd`
-- **GPU NVIDIA**: driver open (`akmod-nvidia-open`, oppure `akmod-nvidia` da F45) da RPM Fusion, compilati durante la build per il kernel dell'immagine, con initramfs rigenerato
-- **Audio e rete**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
-- **Applicazioni**: Firefox, Nautilus, Alacritty, Ghostty, Flatpak
-- **Immagini di installazione**: configurazioni per ISO (GNOME/KDE) e dischi in `disk_config/`
+- **Base**: `quay.io/fedora-ostree-desktops/base-atomic:45` (Fedora Atomic without a desktop)
+- **Desktop**: `niri` scrollable Wayland compositor with the `DankMaterialShell` (`dms`) shell and the `dms-greeter` greeter on `greetd`
+- **NVIDIA GPU**: open drivers (`akmod-nvidia-open`, or `akmod-nvidia` from F45) from RPM Fusion, compiled at build time for the image kernel, with a regenerated initramfs
+- **Audio and network**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
+- **Applications**: Firefox, Nautilus, Alacritty, Ghostty, Flatpak, fastfetch (with a custom "D OS" logo)
+- **Install images**: ISO (GNOME/KDE) and disk configurations in `disk_config/`
 
-## Struttura del repository
+## Repository layout
 
-| Percorso | Contenuto |
+| Path | Contents |
 | --- | --- |
-| `Containerfile` | Definizione dell'immagine |
-| `build_files/build.sh` | Script di build: kernel, driver NVIDIA, pacchetti, servizi |
-| `system_files/` | File copiati nella radice (`/`) dell'immagine |
-| `disk_config/` | Configurazioni per generare ISO e immagini disco |
-| `Justfile` | Comandi per costruire immagini, ISO e VM in locale |
-| `image-template.env` | Nome e metadati dell'immagine |
-| `.github/` | Workflow GitHub Actions per build e firma |
-| `INSTRUCTIONS.md` | Istruzioni originali del template per configurare il repository |
+| `Containerfile` | Image definition |
+| `build_files/build.sh` | Build script: kernel, NVIDIA driver, packages, services |
+| `system_files/` | Files copied onto the image root (`/`) |
+| `disk_config/` | Configurations to generate ISOs and disk images |
+| `Justfile` | Commands to build images, ISOs and VMs locally |
+| `image-template.env` | Image name and metadata |
+| `.github/` | GitHub Actions workflows for build and signing |
+| `INSTRUCTIONS.md` | DrizellaOS installation and upgrade guide |
+| `UNIVERSAL_BLUE_INSTRUCTIONS.md` | Original Universal Blue template guide for setting up the repository |
 
-## Build locale
+## Local build
 
-Servono [Podman](https://podman.io/) e [just](https://just.systems/):
+Requires [Podman](https://podman.io/) and [just](https://just.systems/):
 
 ```bash
 just build
 ```
 
-Vedi `just --list` per i comandi disponibili (ISO, immagini disco, VM).
+See `just --list` for the available commands (ISO, disk images, VM).
 
-## Installazione
+## Installation
 
-Guida completa, partendo da una live ISO e installando su disco con `bootc install`: [docs/INSTALL.md](docs/INSTALL.md).
+The full guide is in [INSTRUCTIONS.md](INSTRUCTIONS.md). It covers installing from an existing Fedora Atomic system with `bootc switch`, installing from a live ISO with `bootc install`, and upgrading.
 
-In alternativa, da un sistema basato su bootc (Fedora Atomic, Bazzite, Bluefin, Aurora...):
+Quick version, from a bootc-based system (Fedora Atomic, Bazzite, Bluefin, Aurora...):
 
 ```bash
-sudo bootc switch ghcr.io/<utente>/drizella-os:latest
+sudo bootc switch ghcr.io/damimpr/drizella-os:latest
 sudo systemctl reboot
 ```
 
-Sostituisci `<utente>` con il proprietario del repository GitHub che pubblica l'immagine.
-
-## Verifica della firma
-
-Le immagini sono firmate con cosign; la chiave pubblica è in `cosign.pub`:
+Later, to upgrade:
 
 ```bash
-cosign verify --key cosign.pub ghcr.io/DamImpr/drizella-os
+sudo bootc upgrade
+sudo systemctl reboot
 ```
 
-## Configurazione e setup
+## Signature verification
 
-Per configurare GitHub Actions, la chiave di firma e il resto del flusso di lavoro, consulta [INSTRUCTIONS.md](INSTRUCTIONS.md).
+Images are signed with cosign; the public key is in `cosign.pub`:
 
-## Licenza
+```bash
+cosign verify --key cosign.pub ghcr.io/damimpr/drizella-os
+```
 
-Vedi [LICENSE](LICENSE).
+## Configuration and setup
+
+To set up GitHub Actions, the signing key and the rest of the workflow, see [UNIVERSAL_BLUE_INSTRUCTIONS.md](UNIVERSAL_BLUE_INSTRUCTIONS.md).
+
+## License
+
+See [LICENSE](LICENSE).
