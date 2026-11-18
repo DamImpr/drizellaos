@@ -214,6 +214,13 @@ generate-build-tags $target_image=image_name $tag=default_tag:
     BUILD_TAGS+=("${tag}")
     BUILD_TAGS+=("${tag}-${DATE}")
 
+    # Tag per versione Fedora (es. v45), ricavata dal FROM base-atomic nella Containerfile
+    FEDORA_VER=$(sed -nE 's|^FROM quay.io/fedora-ostree-desktops/base-atomic:([0-9]+).*|\1|p' Containerfile | head -n1)
+    if [[ -n "${FEDORA_VER}" ]]; then
+        BUILD_TAGS+=("v${FEDORA_VER}")
+        BUILD_TAGS+=("v${FEDORA_VER}-${DATE}")
+    fi
+
     echo "${BUILD_TAGS[@]}"
 
 # Tag Images

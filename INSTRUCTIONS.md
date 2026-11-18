@@ -228,6 +228,28 @@ sudo bootc switch ghcr.io/damimpr/drizella-os:<tag>
 
 Images are rebuilt by GitHub Actions on every push to `main` and daily, so `bootc upgrade` regularly brings in new Fedora and NVIDIA driver updates.
 
+## Image tags
+
+Every build pushed to `main` (and the daily build) publishes these tags:
+
+| Tag | Meaning |
+| --- | --- |
+| `latest` | Always the newest build, whatever the Fedora version |
+| `v45` | Newest build based on Fedora 45 (the version comes from the `FROM` line in the `Containerfile`) |
+| `v45-YYYYMMDD` | A specific day's build of Fedora 45, never moved |
+
+Which one to follow:
+
+- **`v45`**: stay on Fedora 45. `bootc upgrade` keeps bringing the latest builds of that release, and never jumps to a new Fedora version by surprise.
+- **`latest`**: always follow the newest Fedora. When the base image moves to Fedora 46, `bootc upgrade` upgrades you automatically.
+
+When Fedora 46 is released and the `FROM` is bumped, a new `v46` tag appears. To move from `v45` to it:
+
+```bash
+sudo bootc switch ghcr.io/damimpr/drizella-os:v46
+sudo systemctl reboot
+```
+
 ## Secure Boot
 
 The NVIDIA modules are built with `akmods` at image build time and are **not signed with a key present in the firmware**. With Secure Boot enabled the NVIDIA driver will not load. Either disable Secure Boot in the firmware, or sign the modules with your own key and enroll it through a MOK.
