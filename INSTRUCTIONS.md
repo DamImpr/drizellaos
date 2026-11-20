@@ -60,7 +60,7 @@ sudo systemctl reboot
 
 ### 5. First login
 
-After the reboot you get the `dms-greeter` login screen. Your existing users, home directories and `/etc` changes are preserved, so log in with the account you already had. Then check:
+After the reboot you get the `cosmic-greeter` login screen. Your existing users, home directories and `/etc` changes are preserved, so log in with the account you already had. Then check:
 
 ```bash
 sudo bootc status
@@ -192,7 +192,7 @@ systemctl reboot
 
 ### 7. First login
 
-Log in from the greeter (`dms-greeter`) with the user and password chosen in step 5. Then check your privileges:
+Log in from the greeter (`cosmic-greeter`) with the user and password chosen in step 5. Then check your privileges:
 
 ```bash
 sudo -v && sudo bootc status

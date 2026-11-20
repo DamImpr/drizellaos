@@ -90,58 +90,82 @@ dnf5 install -y \
     google-noto-sans-fonts google-noto-emoji-fonts
 
 ########################################
-# 4. niri + DankMaterialShell (COPR abilitato solo in build)
+# NOTA: siamo passati a COSMIC. La configurazione niri + DankMaterialShell
+# (vecchi stage 4-6) è lasciata qui sotto commentata come riferimento.
 ########################################
-dnf5 -y copr enable avengemedia/dms
+# ########################################
+# # 4. niri + DankMaterialShell (COPR abilitato solo in build)
+# ########################################
+# dnf5 -y copr enable avengemedia/dms
+#
+# dnf5 install -y \
+#     niri \
+#     dms \
+#     dms-greeter \
+#     greetd \
+#     xdg-desktop-portal-gnome \
+#     xdg-desktop-portal-gtk \
+#     gnome-keyring \
+#     polkit \
+#     nautilus \
+#     alacritty \
+#     firefox
+#
+# dnf5 install -y --skip-unavailable \
+#     xwayland-satellite \
+#     ghostty \
+#     pavucontrol \
+#     fira-code-fonts
+#
+# dnf5 -y copr disable avengemedia/dms
+#
+# ########################################
+# # 5. Servizi
+# ########################################
+# systemctl enable greetd.service
+# systemctl enable bluetooth.service
+# systemctl enable power-profiles-daemon.service
+# systemctl enable NetworkManager.service
+# systemctl set-default graphical.target
+# # Avvia DMS insieme a niri (equivale a `systemctl --user add-wants niri.service dms`)
+# systemctl --global add-wants niri.service dms.service
+#
+# ########################################
+# # 6. Configurazione greetd -> dms-greeter (scritta dopo l'install dei pacchetti,
+# #    così il file di default di greetd non la sovrascrive)
+# ########################################
+# mkdir -p /etc/greetd
+# cat > /etc/greetd/config.toml <<'EOF'
+# [terminal]
+# vt = 1
+#
+# [default_session]
+# user = "greeter"
+# command = "/usr/bin/dms-greeter --command niri"
+# EOF
 
-dnf5 install -y \
-    niri \
-    dms \
-    dms-greeter \
-    greetd \
-    xdg-desktop-portal-gnome \
-    xdg-desktop-portal-gtk \
-    gnome-keyring \
-    polkit \
-    nautilus \
-    alacritty \
-    firefox
+########################################
+# 4. COSMIC desktop (dai repo Fedora, nessun COPR)
+########################################
+dnf5 install -y @cosmic-desktop-environment
 
 dnf5 install -y --skip-unavailable \
-    xwayland-satellite \
-    ghostty \
+    xdg-desktop-portal-cosmic \
     pavucontrol \
+    firefox \
     fira-code-fonts
-
-dnf5 -y copr disable avengemedia/dms
 
 ########################################
 # 5. Servizi
 ########################################
-systemctl enable greetd.service
+systemctl enable cosmic-greeter.service
 systemctl enable bluetooth.service
 systemctl enable power-profiles-daemon.service
 systemctl enable NetworkManager.service
 systemctl set-default graphical.target
-# Avvia DMS insieme a niri (equivale a `systemctl --user add-wants niri.service dms`)
-systemctl --global add-wants niri.service dms.service
 
 ########################################
-# 6. Configurazione greetd -> dms-greeter (scritta dopo l'install dei pacchetti,
-#    così il file di default di greetd non la sovrascrive)
-########################################
-mkdir -p /etc/greetd
-cat > /etc/greetd/config.toml <<'EOF'
-[terminal]
-vt = 1
-
-[default_session]
-user = "greeter"
-command = "/usr/bin/dms-greeter --command niri"
-EOF
-
-########################################
-# 7. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
+# 6. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
 ########################################
 sed -i -e '/^NAME=/d' -e '/^PRETTY_NAME=/d' -e '/^LOGO=/d' /usr/lib/os-release
 cat >> /usr/lib/os-release <<'EOF'
