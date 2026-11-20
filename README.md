@@ -1,13 +1,13 @@
 # DrizellaOS
 
-DrizellaOS is a custom [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic, designed as an immutable desktop system with [niri](https://github.com/YaLTeR/niri) and [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell).
+DrizellaOS is a custom [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic, designed as an immutable desktop system with the [COSMIC](https://system76.com/cosmic) desktop.
 
 The image is built from a `Containerfile` and distributed as an OCI image signed with [cosign](https://github.com/sigstore/cosign). The project starts from the [Universal Blue template](https://github.com/ublue-os/image-template).
 
 ## Features
 
 - **Base**: `quay.io/fedora-ostree-desktops/base-atomic:45` (Fedora Atomic without a desktop)
-- **Desktop**: `niri` scrollable Wayland compositor with the `DankMaterialShell` (`dms`) shell and the `dms-greeter` greeter on `greetd`
+- **Desktop**: COSMIC (`@cosmic-desktop-environment` from the Fedora repos) with the `cosmic-greeter` login screen
 - **NVIDIA GPU**: open drivers (`akmod-nvidia-open`, or `akmod-nvidia` from F45) from RPM Fusion, compiled at build time for the image kernel, with a regenerated initramfs
 - **Audio and network**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
 - **Applications**: Firefox, Nautilus, Alacritty, Ghostty, Flatpak, fastfetch (with a custom "D OS" logo)
