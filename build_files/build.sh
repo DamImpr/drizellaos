@@ -87,6 +87,7 @@ dnf5 install -y \
     pipewire pipewire-pulseaudio wireplumber \
     NetworkManager-wifi bluez power-profiles-daemon upower accountsservice \
     flatpak sudo xdg-user-dirs git vim-enhanced fastfetch \
+    gnupg2 pinentry-qt \
     google-noto-sans-fonts google-noto-emoji-fonts
 
 ########################################
