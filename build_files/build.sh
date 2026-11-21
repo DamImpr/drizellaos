@@ -145,27 +145,75 @@ dnf5 install -y \
 # EOF
 
 ########################################
-# 4. COSMIC desktop (dai repo Fedora, nessun COPR)
+# NOTA: siamo passati a KDE Plasma. La configurazione COSMIC (vecchi stage 4-5)
+# è lasciata qui sotto commentata come riferimento.
 ########################################
-dnf5 install -y @cosmic-desktop-environment
+# ########################################
+# # 4. COSMIC desktop (dai repo Fedora, nessun COPR)
+# ########################################
+# dnf5 install -y @cosmic-desktop-environment
+#
+# dnf5 install -y --skip-unavailable \
+#     xdg-desktop-portal-cosmic \
+#     pavucontrol \
+#     firefox \
+#     fira-code-fonts
+#
+# ########################################
+# # 5. Servizi
+# ########################################
+# systemctl enable cosmic-greeter.service
+# systemctl enable bluetooth.service
+# systemctl enable power-profiles-daemon.service
+# systemctl enable NetworkManager.service
+# systemctl set-default graphical.target
+
+########################################
+# 4. KDE Plasma (dai repo Fedora, nessun COPR)
+########################################
+dnf5 install -y @kde-desktop-environment
 
 dnf5 install -y --skip-unavailable \
-    xdg-desktop-portal-cosmic \
-    pavucontrol \
+    xdg-desktop-portal-kde \
     firefox \
     fira-code-fonts
 
 ########################################
-# 5. Servizi
+# 5. Virtualizzazione: libvirt + QEMU/KVM + virt-manager
 ########################################
-systemctl enable cosmic-greeter.service
+dnf5 install -y \
+    qemu-kvm \
+    libvirt \
+    virt-manager \
+    virt-install \
+    virt-viewer \
+    edk2-ovmf \
+    swtpm
+
+########################################
+# 6. Servizi
+########################################
+# Login manager: da Fedora 44 KDE usa plasma-login-manager al posto di SDDM;
+# abilito quello presente nell'immagine e fallisco la build se non ce n'è nessuno.
+if [ -e /usr/lib/systemd/system/plasmalogin.service ]; then
+    systemctl enable plasmalogin.service
+elif [ -e /usr/lib/systemd/system/sddm.service ]; then
+    systemctl enable sddm.service
+else
+    echo "Nessun login manager KDE trovato" >&2
+    exit 1
+fi
 systemctl enable bluetooth.service
 systemctl enable power-profiles-daemon.service
 systemctl enable NetworkManager.service
+# libvirt modulare (default su Fedora): attivazione via socket
+for d in virtqemud virtnetworkd virtstoraged virtnodedevd virtsecretd virtinterfaced virtnwfilterd; do
+    systemctl enable "${d}.socket"
+done
 systemctl set-default graphical.target
 
 ########################################
-# 6. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
+# 7. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
 ########################################
 sed -i -e '/^NAME=/d' -e '/^PRETTY_NAME=/d' -e '/^LOGO=/d' /usr/lib/os-release
 cat >> /usr/lib/os-release <<'EOF'
