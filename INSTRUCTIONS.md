@@ -60,7 +60,7 @@ sudo systemctl reboot
 
 ### 5. First login
 
-After the reboot you get the `cosmic-greeter` login screen. Your existing users, home directories and `/etc` changes are preserved, so log in with the account you already had. Then check:
+After the reboot you get the KDE Plasma login screen. Your existing users, home directories and `/etc` changes are preserved, so log in with the account you already had. Then check:
 
 ```bash
 sudo bootc status
@@ -192,13 +192,34 @@ systemctl reboot
 
 ### 7. First login
 
-Log in from the greeter (`cosmic-greeter`) with the user and password chosen in step 5. Then check your privileges:
+Log in from the KDE Plasma login screen with the user and password chosen in step 5. Then check your privileges:
 
 ```bash
 sudo -v && sudo bootc status
 ```
 
 > Steps 5 and 6 have not been tested on DrizellaOS yet: update this guide after the first test, in particular the home directory creation via `tmpfiles.d` and the effect of `--target-imgref`.
+
+---
+
+## Virtual machines
+
+The image ships libvirt, QEMU/KVM and virt-manager, ready to use with no extra setup.
+
+When virt-manager connects to `qemu:///system`, the KDE authentication dialog asks for your password (the same one you use for `sudo`). It asks once per connection: while virt-manager stays open you can create, start, stop and edit VMs, networks and disks without being asked again. From a terminal, `virsh -c qemu:///system ...` asks the same way, or use `sudo virsh ...`. This requires an administrator user (member of `wheel`), which is the default for the user created at install time.
+
+### Optional: skip the password prompt
+
+If you prefer not to type the password each time you open virt-manager, add your user to the `libvirt` group. On Fedora Atomic the group exists only in `/usr/lib/group`, so copy it into `/etc/group` first:
+
+```bash
+grep -E '^libvirt:' /usr/lib/group | sudo tee -a /etc/group
+sudo usermod -aG libvirt "$USER"
+```
+
+Log out and back in for the change to take effect.
+
+> Members of the `libvirt` group can manage system VMs without a password, and that is effectively root-equivalent (for example, a VM can be given access to host disks). On a single-user desktop this is a common trade-off; if you do not want it, skip this step and keep the password prompt.
 
 ---
 

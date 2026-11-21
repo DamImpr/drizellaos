@@ -1,16 +1,17 @@
 # DrizellaOS
 
-DrizellaOS is a custom [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic, designed as an immutable desktop system with the [COSMIC](https://system76.com/cosmic) desktop.
+DrizellaOS is a custom [bootc](https://github.com/bootc-dev/bootc) image based on Fedora Atomic, designed as an immutable desktop system with the [KDE Plasma](https://kde.org/plasma-desktop/) desktop.
 
 The image is built from a `Containerfile` and distributed as an OCI image signed with [cosign](https://github.com/sigstore/cosign). The project starts from the [Universal Blue template](https://github.com/ublue-os/image-template).
 
 ## Features
 
 - **Base**: `quay.io/fedora-ostree-desktops/base-atomic:45` (Fedora Atomic without a desktop)
-- **Desktop**: COSMIC (`@cosmic-desktop-environment` from the Fedora repos) with the `cosmic-greeter` login screen
+- **Desktop**: KDE Plasma (`@kde-desktop-environment` from the Fedora repos) with the Plasma login manager (or SDDM, whichever Fedora ships)
 - **NVIDIA GPU**: open drivers (`akmod-nvidia-open`, or `akmod-nvidia` from F45) from RPM Fusion, compiled at build time for the image kernel, with a regenerated initramfs
 - **Audio and network**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
-- **Applications**: Firefox, Nautilus, Alacritty, Ghostty, Flatpak, fastfetch (with a custom "D OS" logo)
+- **Virtualization**: libvirt + QEMU/KVM with virt-manager (UEFI via `edk2-ovmf`, TPM via `swtpm`)
+- **Applications**: Firefox, the KDE applications from the Plasma group (Dolphin, Konsole, ...), Flatpak, fastfetch (with a custom "D OS" logo)
 - **Install images**: ISO (GNOME/KDE) and disk configurations in `disk_config/`
 
 ## Repository layout
