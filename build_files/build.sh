@@ -214,6 +214,17 @@ done
 systemctl set-default graphical.target
 
 ########################################
+# Pulizia finale per `bootc container lint`
+########################################
+# Un pacchetto installato sopra può aver creato /var/run come directory: deve essere un symlink a ../run
+if [ ! -L /var/run ]; then
+    rm -rf /var/run
+    ln -s ../run /var/run
+fi
+# File runtime/cache lasciati da dnf, akmods e dal build (solo warning, ma inutili nell'immagine)
+rm -rf /var/roothome/.viminfo /var/cache/akmods /var/lib/dnf/repos 2>/dev/null || true
+
+########################################
 # 7. Branding: nome OS "Drizella OS" (ID=fedora resta per compatibilità con RPM Fusion/COPR)
 ########################################
 sed -i -e '/^NAME=/d' -e '/^PRETTY_NAME=/d' -e '/^LOGO=/d' /usr/lib/os-release
