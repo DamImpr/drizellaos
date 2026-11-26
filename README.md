@@ -12,6 +12,8 @@ The image is built from a `Containerfile` and distributed as an OCI image signed
 - **Audio and network**: PipeWire/WirePlumber, NetworkManager (Wi-Fi), Bluetooth, power-profiles-daemon
 - **Virtualization**: libvirt + QEMU/KVM with virt-manager (UEFI via `edk2-ovmf`, TPM via `swtpm`)
 - **Applications**: Firefox, the KDE applications from the Plasma group (Dolphin, Konsole, ...), Flatpak, fastfetch (with a custom "D OS" logo)
+- **Command-line tools**: htop, btop, nvtop
+- **Homebrew**: from [ublue-os/brew](https://github.com/ublue-os/brew), set up in `/home/linuxbrew` at first boot and updated automatically by systemd timers. It is owned by the user with UID 1000 (normally the first user created)
 - **Install images**: ISO (GNOME/KDE) and disk configurations in `disk_config/`
 
 ## Repository layout

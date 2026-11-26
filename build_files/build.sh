@@ -87,6 +87,7 @@ dnf5 install -y \
     pipewire pipewire-pulseaudio wireplumber \
     NetworkManager-wifi bluez power-profiles-daemon upower accountsservice \
     flatpak sudo xdg-user-dirs git vim-enhanced fastfetch \
+    htop btop nvtop \
     gnupg2 pinentry-qt \
     google-noto-sans-fonts google-noto-emoji-fonts
 
@@ -211,6 +212,11 @@ systemctl enable NetworkManager.service
 for d in virtqemud virtnetworkd virtstoraged virtnodedevd virtsecretd virtinterfaced virtnwfilterd; do
     systemctl enable "${d}.socket"
 done
+# Homebrew (file copiati dal Containerfile): brew-setup lo estrae in /home/linuxbrew
+# al primo avvio, i timer tengono aggiornati brew e i pacchetti installati
+systemctl enable brew-setup.service
+systemctl enable brew-update.timer
+systemctl enable brew-upgrade.timer
 systemctl set-default graphical.target
 
 ########################################
